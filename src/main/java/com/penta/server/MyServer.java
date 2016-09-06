@@ -25,21 +25,23 @@ public class MyServer {
 		while (true) {
 			Socket socket = serverSocket.accept();
 			System.out.println("客户端已连接"+num);
+			System.out.println(socket.getInetAddress());
 			//将当前客户端装入clients
 			clients.add(socket);
-			new MyThread(socket, clients).start();;
+			Thread thread = new Thread(new MyCenter(socket, clients));
+			thread.start();
 			num++;
 		}
 	}
 
 }
 
-class MyThread extends Thread {
+class MyCenter implements Runnable {
 	Socket client;
 	ArrayList<Socket> clients;
 	BufferedReader br;
 	
-	public MyThread(Socket client, ArrayList<Socket> clients) throws IOException {
+	public MyCenter(Socket client, ArrayList<Socket> clients) throws IOException {
 		this.client = client;
 		this.clients = clients;
 		br = new BufferedReader(new InputStreamReader(client.getInputStream()));

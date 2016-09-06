@@ -12,7 +12,9 @@ public class MyClient2 {
 		// TODO Auto-generated method stub
 		//连接服务器
 		Socket socket = new Socket("localhost", 8000);
-		new MyThread(socket).start();
+		//创建线程
+		Thread thread = new Thread(new MyRun2(socket));
+		thread.start();
 		//获取输入流
 		BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		while (true) {			
@@ -23,10 +25,10 @@ public class MyClient2 {
 	
 }
 
-class MyThread extends Thread {
+class MyRun2 implements Runnable {
 	Socket client;
 	
-	public MyThread(Socket client) {
+	public MyRun2(Socket client) {
 		this.client = client;
 	}
 	
