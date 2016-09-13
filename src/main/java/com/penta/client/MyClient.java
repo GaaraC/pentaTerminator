@@ -10,12 +10,12 @@ public class MyClient {
 
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		//连接服务器
-		Socket socket = new Socket("localhost", 8000);
-		//创建线程
+		//创建连接到本机的socket
+		Socket socket = new Socket("169.254.205.220", 8000);
+		//创建线程来不断发送信息
 		Thread thread = new Thread(new MyRun(socket));
 		thread.start();
-		//获取输入流
+		//接收信息
 		BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		while (true) {			
 			String str = br.readLine().trim();
@@ -32,17 +32,16 @@ class MyRun implements Runnable {
 		this.client = client;
 	}
 	
-	//客户端发出消息
+	//发送信息
 	public void run() {
 		try {
-			//捕获控制台输入信息
+			//从控制台录入信息
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));	
 			PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
-			//发送信息给服务器
+			//将信息输出到socket
 			while (true) {
-				//要发送的信息
 				String msg = br.readLine().trim();
-				//发送
+				//当前用户发送的完整信息
 				pw.println("Gaara:"+msg);
 			}
 		} catch (IOException e) {
